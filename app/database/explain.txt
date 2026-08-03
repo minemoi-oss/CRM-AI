@@ -1,0 +1,5 @@
+Contient :
+
+la connexion PostgreSQL ;
+la Session SQLAlchemy ;
+la classe Base.

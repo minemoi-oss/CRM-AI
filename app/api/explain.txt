@@ -1,0 +1,21 @@
+C'est la porte d'entrée de ton application.
+
+Elle reçoit les requêtes HTTP.
+
+Par exemple :
+
+POST /users
+
+ou
+
+GET /projects
+
+Ici, on ne met pas de logique métier.
+
+On appelle simplement un service.
+
+Exemple :
+
+@router.post("/users")
+def create_user(user: UserCreate):
+    return user_service.create(user)

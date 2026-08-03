@@ -1,0 +1,20 @@
+Ce dossier contient les pages HTML générées par le serveur.
+
+Par exemple :
+
+templates/
+├── index.html
+├── login.html
+├── dashboard.html
+└── portfolio.html
+
+FastAPI peut utiliser un moteur de templates comme Jinja2 pour remplir ces pages avec des données.
+
+Exemple :
+
+return templates.TemplateResponse(
+    "index.html",
+    {"request": request, "user": user}
+)
+
+Ici, le serveur génère une page HTML avant de l'envoyer au navigateur.

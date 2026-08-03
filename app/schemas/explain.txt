@@ -1,0 +1,16 @@
+Les schémas Pydantic servent à valider les données.
+
+Par exemple :
+
+Quand un utilisateur s'inscrit :
+
+{
+    "email": "...",
+    "password": "..."
+}
+
+Le schéma vérifie que :
+
+l'email est valide ;
+le mot de passe est présent ;
+les types sont corrects.

@@ -1,0 +1,13 @@
+Le repository parle uniquement à la base de données.
+
+Il contient des méthodes comme :
+
+create_user()
+
+get_user_by_email()
+
+delete_user()
+
+Le repository ne sait rien des règles métier.
+
+Il sait uniquement lire et écrire dans PostgreSQL

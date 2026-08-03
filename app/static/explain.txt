@@ -1,0 +1,14 @@
+Ce dossier contient les fichiers statiques, c'est-à-dire les fichiers qui ne changent pas.
+
+Par exemple :
+
+static/
+├── css/
+│   └── style.css
+├── js/
+│   └── app.js
+├── images/
+│   └── logo.png
+└── fonts/
+
+Le navigateur télécharge directement ces fichiers.

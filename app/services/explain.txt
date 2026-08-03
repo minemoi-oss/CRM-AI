@@ -1,0 +1,13 @@
+C'est le cerveau de l'application.
+
+On y écrit les règles métier.
+
+Exemple :
+
+Avant de créer un utilisateur :
+
+vérifier que l'email n'existe pas ;
+hacher le mot de passe ;
+créer le JWT.
+
+Le service décide quoi faire.
