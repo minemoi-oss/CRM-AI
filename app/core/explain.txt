@@ -1,5 +1,47 @@
-Tout ce qui concerne la configuration :
+À quoi sert-il ?
 
-.env
-JWT
-paramètres globaux
+Le dossier core contient tout ce qui est global à ton application.
+
+On y met généralement :
+
+la configuration (config.py)
+la sécurité (security.py)
+les constantes
+les fonctions utilisées partout
+
+Par exemple :
+
+core/
+│
+├── config.py
+├── security.py
+└── constants.py
+Exemple
+
+Dans ton CRM, tu as un fichier :
+
+settings = Settings()
+
+Pourquoi est-il dans core ?
+
+Parce que toute l'application a besoin de connaître :
+
+le mot de passe PostgreSQL
+la clé JWT
+le temps d'expiration du token
+
+Ces informations ne concernent pas uniquement les utilisateurs ou les clients : elles concernent tout le projet.
+
+Analogie
+
+Imagine une entreprise.
+
+Le dossier core, c'est le bureau de direction.
+
+C'est là qu'on trouve :
+
+les règles de l'entreprise
+les clés du bâtiment
+les informations importantes
+
+Tous les employés peuvent en avoir besoin.

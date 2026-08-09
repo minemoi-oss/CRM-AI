@@ -49,8 +49,8 @@ class Quote(Base):
         cascade="all, delete-orphan"
     )
 
-invoice = relationship(
-    "Invoice",
-    back_populates="quote",
-    uselist=False,
-)
+    invoice = relationship(
+        "Invoice",
+        back_populates="quote",
+        uselist=False,
+    )

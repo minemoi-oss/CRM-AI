@@ -1,16 +1,77 @@
-Les schémas Pydantic servent à valider les données.
+3. Le dossier repositories
+
+C'est souvent le dossier qui pose le plus de questions.
+
+À quoi sert-il ?
+
+Il contient toutes les opérations qui parlent directement à la base de données.
 
 Par exemple :
 
-Quand un utilisateur s'inscrit :
+Créer un client
 
-{
-    "email": "...",
-    "password": "..."
-}
+db.add(client)
+db.commit()
 
-Le schéma vérifie que :
+Chercher un client
 
-l'email est valide ;
-le mot de passe est présent ;
-les types sont corrects.
+db.query(Client).filter(...)
+
+Supprimer un client
+
+db.delete(client)
+
+Tout cela appartient au repository.
+
+Pourquoi ne pas mettre ça dans les routes ?
+
+Imaginons une route :
+
+@app.post("/clients")
+
+Si tu écris directement :
+
+db.add(...)
+db.commit(...)
+db.refresh(...)
+
+dans toutes tes routes,
+
+tu vas répéter ce code partout.
+
+Le repository évite cette répétition.
+
+Exemple :
+
+Au lieu de faire
+
+db.add(client)
+db.commit()
+db.refresh(client)
+
+tu écris simplement
+
+client_repository.create(db, client)
+
+Le code est plus propre.
+
+Analogie
+
+Imagine un restaurant.
+
+Le client passe une commande.
+
+Le serveur prend la commande.
+
+Le cuisinier prépare le plat.
+
+Dans ton CRM :
+
+La route FastAPI = le serveur
+Le repository = le cuisinier
+PostgreSQL = la cuisine
+
+La route ne va pas directement dans la cuisine.
+
+Elle demande au repository de faire le travail
+      ▼

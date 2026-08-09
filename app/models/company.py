@@ -36,8 +36,3 @@ class Company(Base):
     "Service",
     back_populates="company"
     )
-
-    quotes = relationship(
-        "Quote",
-        back_populates="company"
-    )

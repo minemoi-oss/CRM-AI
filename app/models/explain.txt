@@ -1,0 +1,61 @@
+ 
+2. Le dossier models
+À quoi sert-il ?
+
+Le dossier models décrit la structure des tables de la base de données.
+
+Par exemple :
+
+class User(Base):
+
+ou
+
+class Client(Base):
+
+Un modèle représente une table PostgreSQL.
+
+Exemple :
+
+class Client(Base):
+
+    __tablename__ = "clients"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    email = Column(String)
+
+Quand SQLAlchemy voit ce modèle, il comprend que la base doit contenir une table :
+
+clients
+---------------------
+id
+name
+email
+
+Le modèle ne fait pas de calcul : il décrit simplement la forme des données.
+
+Analogie
+
+Imagine un architecte.
+
+Avant de construire une maison, il dessine un plan.
+
+Le modèle est ce plan.
+
+Il dit :
+
+il y aura une porte
+deux fenêtres
+trois chambres
+
+Ensuite seulement, la maison est construite.
+
+Dans ton CRM :
+
+Le modèle dit :
+
+un client possède un nom
+un email
+un téléphone
+
+SQLAlchemy construit ensuite la table correspondante.
