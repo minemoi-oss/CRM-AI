@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.models.invoice import Invoice
+from app.models.quote import Quote
+from app.models.customer import Customer
 
 
 def create(
@@ -17,21 +19,25 @@ def create(
 
 def get_by_id(
     db: Session,
-    invoice_id: int
+    invoice_id: int,
+    company_id: int,
 ) -> Invoice | None:
 
     return (
         db.query(Invoice)
-        .filter(Invoice.id == invoice_id)
+        .join(Quote)
+        .join(Customer)
+        .filter(Invoice.id == invoice_id, Customer.company_id == company_id)
         .first()
     )
 
 
 def get_all(
-    db: Session
+    db: Session,
+    company_id: int,
 ) -> list[Invoice]:
 
-    return db.query(Invoice).all()
+    return db.query(Invoice).join(Quote).join(Customer).filter(Customer.company_id == company_id).all()
 
 
 def update(

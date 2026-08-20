@@ -19,5 +19,8 @@ class InvoiceResponse(BaseModel):
     total: float
     created_at: datetime
     updated_at: datetime
+    customer_name: str
+    payment_method: str | None
+    due_date: datetime
 
     model_config = ConfigDict(from_attributes=True)

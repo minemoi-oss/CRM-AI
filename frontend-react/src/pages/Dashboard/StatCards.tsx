@@ -77,7 +77,7 @@ function StatIcon({ type }: { type: StatCardData["icon"] }) {
 
 function StatCards({ cards }: StatCardsProps) {
   return (
-    <div className="grid grid-cols-4 gap-[12px]">
+    <div className="responsive-grid responsive-kpi-grid grid grid-cols-4 gap-[12px] max-md:grid-cols-2">
 
       {cards.map((card) => (
         <div
@@ -132,10 +132,6 @@ function StatCards({ cards }: StatCardsProps) {
               `}
             >
               {card.change}
-            </span>
-
-            <span className="text-[9px] text-[#94A3B8]">
-              vs mois dernier
             </span>
 
           </div>

@@ -9,3 +9,6 @@ from .payment import Payment
 from .user import User
 from .company import Company
 from .customer import Customer
+from .prospect import Prospect
+from .auth import AuthRateLimit, AuthSession, AuthToken, SecurityEvent
+from .ai import AIUsageEvent

@@ -1,10 +1,9 @@
-interface TextareaProps {
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string
   errorMessage?: string
   successMessage?: string
   disabled?: boolean
   className?: string
-  [key: string]: any
 }
 
 function Textarea({

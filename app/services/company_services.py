@@ -2,18 +2,24 @@ from sqlalchemy.orm import Session
 
 from app.models.company import Company
 from app.schemas.company import CompanyCreate, CompanyUpdate
+from app.models.user import User
 import app.repositories.repisotorie_company as company_repository
 
 def create_company(
     db: Session,
-    company_data: CompanyCreate
+    company_data: CompanyCreate,
+    current_user: User,
 ) -> Company:
+
+    if current_user.company is not None:
+        raise ValueError("Cet utilisateur possède déjà une entreprise")
 
     company = Company(
         name=company_data.name,
         email=company_data.email,
         phone=company_data.phone,
         website=company_data.website,
+        owner_id=current_user.id,
     )
 
     return company_repository.create(db, company)
@@ -21,10 +27,10 @@ def create_company(
 
 def get_company(
     db: Session,
-    company_id: int
+    current_user: User,
 ) -> Company:
 
-    company = company_repository.get_by_id(db, company_id)
+    company = current_user.company
 
     if company is None:
         raise ValueError("Entreprise introuvable")
@@ -32,17 +38,13 @@ def get_company(
     return company
 
 
-def get_companies(db: Session) -> list[Company]:
-    return company_repository.get_all(db)
-
-
 def update_company(
     db: Session,
-    company_id: int,
-    company_data: CompanyUpdate
+    company_data: CompanyUpdate,
+    current_user: User,
 ) -> Company:
 
-    company = company_repository.get_by_id(db, company_id)
+    company = current_user.company
 
     if company is None:
         raise ValueError("Entreprise introuvable")
@@ -57,10 +59,10 @@ def update_company(
 
 def delete_company(
     db: Session,
-    company_id: int
+    current_user: User,
 ) -> None:
 
-    company = company_repository.get_by_id(db, company_id)
+    company = current_user.company
 
     if company is None:
         raise ValueError("Entreprise introuvable")

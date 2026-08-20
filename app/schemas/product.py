@@ -8,7 +8,6 @@ class ProductCreate(BaseModel):
     description: str | None = None
     price: float = Field(gt=0)
     stock: int = Field(ge=0)
-    company_id: int
 
 
 class ProductUpdate(BaseModel):
@@ -16,7 +15,6 @@ class ProductUpdate(BaseModel):
     description: str | None = None
     price: float = Field(gt=0)
     stock: int = Field(ge=0)
-    company_id: int
 
 
 class ProductResponse(BaseModel):

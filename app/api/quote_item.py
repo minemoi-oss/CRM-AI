@@ -7,6 +7,8 @@ from app.schemas.quote_item import (
     QuoteItemResponse,
 )
 from app.services import quote_item_service
+from app.api.dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(
     prefix="/quote-items",
@@ -18,11 +20,13 @@ router = APIRouter(
 def create_quote_item(
     item: QuoteItemCreate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
         return quote_item_service.create_quote_item(
             db,
             item,
+            current_user,
         )
 
     except ValueError as e:
@@ -35,5 +39,6 @@ def create_quote_item(
 @router.get("", response_model=list[QuoteItemResponse])
 def get_quote_items(
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return quote_item_service.get_quote_items(db)
+    return quote_item_service.get_quote_items(db, current_user)

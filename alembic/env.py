@@ -19,9 +19,10 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app.database.base import Base
-from app.models.user import User
-from app.models.customer import Customer
-from app.models.company import Company
+from app.database.session import DATABASE_URL
+import app.models  # noqa: F401 - registers every model in Base.metadata
+
+config.set_main_option("sqlalchemy.url", DATABASE_URL.replace("%", "%%"))
 target_metadata = Base.metadata
 
 

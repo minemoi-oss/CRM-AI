@@ -5,13 +5,15 @@ interface RevenueData {
 
 interface RevenueChartProps {
   data: RevenueData[]
+  period: 6 | 12
+  onPeriodChange: (period: 6 | 12) => void
 }
 
-function RevenueChart({ data }: RevenueChartProps) {
-  const maxValue = Math.max(...data.map((item) => item.value))
+function RevenueChart({ data, period, onPeriodChange }: RevenueChartProps) {
+  const maxValue = Math.max(0, ...data.map((item) => item.value))
 
   return (
-    <div className="rounded-[8px] border border-[#E2E8F0] bg-white p-[16px]">
+    <div className="rounded-[10px] border border-[#E2E8F0] bg-white p-[18px] shadow-[0_4px_18px_rgba(15,23,42,0.04)]">
 
       {/* Header */}
 
@@ -23,7 +25,7 @@ function RevenueChart({ data }: RevenueChartProps) {
           </h3>
 
           <p className="mt-[3px] text-[9px] text-[#94A3B8]">
-            Évolution des revenus
+            Évolution des encaissements
           </p>
         </div>
 
@@ -39,7 +41,8 @@ function RevenueChart({ data }: RevenueChartProps) {
             text-[#64748B]
             outline-none
           "
-          defaultValue="6"
+          value={period}
+          onChange={(event) => onPeriodChange(Number(event.target.value) as 6 | 12)}
         >
           <option value="6">6 derniers mois</option>
           <option value="12">12 derniers mois</option>
@@ -82,10 +85,11 @@ function RevenueChart({ data }: RevenueChartProps) {
               >
 
                 <div
+                  title={`${item.month} : ${item.value.toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}`}
                   className="
                     w-[24px]
                     rounded-t-[4px]
-                    bg-[#2563EB]
+                    bg-gradient-to-t from-[#1D4ED8] to-[#60A5FA]
                     transition-all
                   "
                   style={{

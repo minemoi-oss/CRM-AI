@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.company import Company
+    from app.models.prospect import Prospect
 
 from app.database.base import Base
 
@@ -47,4 +48,8 @@ class Customer(Base):
     quotes = relationship(
     "Quote",
     back_populates="customer"
+    )
+    source_prospect: Mapped["Prospect | None"] = relationship(
+        back_populates="customer",
+        uselist=False,
     )

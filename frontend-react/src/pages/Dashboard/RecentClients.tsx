@@ -8,10 +8,12 @@ interface Client {
 
 interface RecentClientsProps {
   clients: Client[]
+  onViewAll: () => void
 }
 
 function RecentClients({
   clients,
+  onViewAll,
 }: RecentClientsProps) {
   return (
     <div className="rounded-[8px] border border-[#E2E8F0] bg-white p-[16px]">
@@ -26,6 +28,7 @@ function RecentClients({
 
         <button
           type="button"
+          onClick={onViewAll}
           className="text-[9px] font-medium text-[#2563EB]"
         >
           Voir tout
@@ -69,6 +72,7 @@ function RecentClients({
 
         {/* Rows */}
 
+        {clients.length === 0 && <p className="py-[24px] text-center text-[10px] text-[#94A3B8]">Aucun client pour le moment.</p>}
         {clients.map((client) => (
           <div
             key={client.id}

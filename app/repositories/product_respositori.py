@@ -15,15 +15,17 @@ def create(
 
 def get_by_id(
     db: Session,
-    product_id: int
+    product_id: int,
+    company_id: int,
 ) -> Product | None:
-    return db.get(Product, product_id)
+    return db.query(Product).filter(Product.id == product_id, Product.company_id == company_id).first()
 
 
 def get_all(
-    db: Session
+    db: Session,
+    company_id: int,
 ) -> list[Product]:
-    return db.query(Product).all()
+    return db.query(Product).filter(Product.company_id == company_id).all()
 
 
 def update(

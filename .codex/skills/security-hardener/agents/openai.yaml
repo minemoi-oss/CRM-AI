@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Hardener"
+  short_description: "Audite et corrige les failles de sécurité du projet"
+  default_prompt: "Utilise $security-hardener pour auditer la sécurité de ce projet, corriger les vulnérabilités confirmées et vérifier les corrections."

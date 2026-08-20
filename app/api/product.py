@@ -8,6 +8,8 @@ from app.schemas.product import (
     ProductUpdate,
 )
 from app.services import product_service
+from app.api.dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(
     prefix="/products",
@@ -18,30 +20,35 @@ router = APIRouter(
 @router.post("", response_model=ProductResponse)
 def create_product(
     product: ProductCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     return product_service.create_product(
         db,
-        product
+        product,
+        current_user,
     )
 
 
 @router.get("", response_model=list[ProductResponse])
 def get_products(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    return product_service.get_products(db)
+    return product_service.get_products(db, current_user)
 
 
 @router.get("/{product_id}", response_model=ProductResponse)
 def get_product(
     product_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
         return product_service.get_product(
             db,
-            product_id
+            product_id,
+            current_user,
         )
 
     except ValueError:
@@ -55,13 +62,15 @@ def get_product(
 def update_product(
     product_id: int,
     product: ProductUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
         return product_service.update_product(
             db,
             product_id,
-            product
+            product,
+            current_user,
         )
 
     except ValueError:
@@ -74,12 +83,14 @@ def update_product(
 @router.delete("/{product_id}")
 def delete_product(
     product_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
         product_service.delete_product(
             db,
-            product_id
+            product_id,
+            current_user,
         )
 
         return {

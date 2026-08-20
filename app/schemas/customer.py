@@ -8,7 +8,6 @@ class CustomerCreate(BaseModel):
     last_name: str = Field(min_length=2, max_length=50)
     email: EmailStr
     phone: str = Field(min_length=8, max_length=20)
-    company_id: int | None = None
 
 
 class CustomerUpdate(BaseModel):
@@ -16,7 +15,6 @@ class CustomerUpdate(BaseModel):
     last_name: str = Field(min_length=2, max_length=50)
     email: EmailStr
     phone: str = Field(min_length=8, max_length=20)
-    company_id: int | None = None
 
 
 class CustomerResponse(BaseModel):
@@ -30,3 +28,11 @@ class CustomerResponse(BaseModel):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CustomerListResponse(BaseModel):
+    items: list[CustomerResponse]
+    total: int
+    page: int
+    size: int
+    pages: int

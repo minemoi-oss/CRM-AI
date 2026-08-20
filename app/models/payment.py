@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, Float, String
+from sqlalchemy import DateTime, ForeignKey, Float, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
@@ -22,9 +22,9 @@ class Payment(Base):
         default="Pending",
     )
 
-    paid_at: Mapped[datetime]
+    paid_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    created_at: Mapped[datetime]
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     invoice_id: Mapped[int] = mapped_column(
         ForeignKey("invoices.id"),

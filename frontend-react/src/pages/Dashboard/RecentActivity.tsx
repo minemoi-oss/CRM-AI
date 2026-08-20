@@ -1,5 +1,5 @@
 interface Activity {
-  id: number
+  id: number | string
   title: string
   description: string
   time: string
@@ -83,6 +83,9 @@ function ActivityIcon({
 function RecentActivity({
   activities,
 }: RecentActivityProps) {
+  const [expanded, setExpanded] = useState(false)
+  const visibleActivities = expanded ? activities : activities.slice(0, 4)
+
   return (
     <div className="rounded-[8px] border border-[#E2E8F0] bg-white p-[16px]">
 
@@ -94,12 +97,11 @@ function RecentActivity({
           Activité récente
         </h3>
 
-        <button
-          type="button"
-          className="text-[9px] font-medium text-[#2563EB]"
-        >
-          Voir tout
-        </button>
+        {activities.length > 4 && (
+          <button type="button" onClick={() => setExpanded((value) => !value)} className="text-[9px] font-medium text-[#2563EB] hover:text-[#1D4ED8]">
+            {expanded ? "Réduire" : "Voir tout"}
+          </button>
+        )}
 
       </div>
 
@@ -108,7 +110,8 @@ function RecentActivity({
 
       <div className="mt-[14px]">
 
-        {activities.map((activity) => (
+        {activities.length === 0 && <p className="py-[24px] text-center text-[10px] text-[#94A3B8]">Aucune activité récente.</p>}
+        {visibleActivities.map((activity) => (
           <div
             key={activity.id}
             className="
@@ -171,3 +174,4 @@ function RecentActivity({
 }
 
 export default RecentActivity
+import { useState } from "react"

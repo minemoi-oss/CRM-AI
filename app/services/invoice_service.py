@@ -1,22 +1,30 @@
-from datetime import datetime
+from uuid import uuid4
 
 from sqlalchemy.orm import Session
 
 from app.models.invoice import Invoice
 from app.repositories import invoice_repository
 from app.schemas.invoice import InvoiceCreate, InvoiceUpdate
+from app.models.user import User
+from app.repositories import quote_repository
+from app.services.access import get_company_id
 
 
 def create_invoice(
     db: Session,
-    invoice_data: InvoiceCreate
+    invoice_data: InvoiceCreate,
+    current_user: User,
 ) -> Invoice:
 
+    quote = quote_repository.get_by_id(db, invoice_data.quote_id, get_company_id(current_user))
+    if quote is None:
+        raise ValueError("Devis introuvable")
+
     invoice = Invoice(
-        invoice_number=f"FAC-{int(datetime.now().timestamp())}",
+        invoice_number=f"FAC-{uuid4().hex[:12].upper()}",
         quote_id=invoice_data.quote_id,
         status="Draft",
-        total=0,
+        total=quote.total,
     )
 
     return invoice_repository.create(
@@ -27,12 +35,14 @@ def create_invoice(
 
 def get_invoice(
     db: Session,
-    invoice_id: int
+    invoice_id: int,
+    current_user: User,
 ) -> Invoice:
 
     invoice = invoice_repository.get_by_id(
         db,
-        invoice_id
+        invoice_id,
+        get_company_id(current_user),
     )
 
     if invoice is None:
@@ -42,21 +52,24 @@ def get_invoice(
 
 
 def get_invoices(
-    db: Session
+    db: Session,
+    current_user: User,
 ) -> list[Invoice]:
 
-    return invoice_repository.get_all(db)
+    return invoice_repository.get_all(db, get_company_id(current_user))
 
 
 def update_invoice(
     db: Session,
     invoice_id: int,
-    invoice_data: InvoiceUpdate
+    invoice_data: InvoiceUpdate,
+    current_user: User,
 ) -> Invoice:
 
     invoice = invoice_repository.get_by_id(
         db,
-        invoice_id
+        invoice_id,
+        get_company_id(current_user),
     )
 
     if invoice is None:
@@ -72,12 +85,14 @@ def update_invoice(
 
 def delete_invoice(
     db: Session,
-    invoice_id: int
+    invoice_id: int,
+    current_user: User,
 ):
 
     invoice = invoice_repository.get_by_id(
         db,
-        invoice_id
+        invoice_id,
+        get_company_id(current_user),
     )
 
     if invoice is None:

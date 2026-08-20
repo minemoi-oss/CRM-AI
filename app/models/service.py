@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, Float
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, String, Float, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
@@ -8,6 +8,11 @@ from app.database.base import Base
 
 class Service(Base):
     __tablename__ = "services"
+    __table_args__ = (
+        CheckConstraint("pricing_type IN ('fixed', 'hourly')", name="ck_services_pricing_type"),
+        CheckConstraint("price > 0", name="ck_services_price_positive"),
+        CheckConstraint("duration IS NULL OR duration > 0", name="ck_services_duration_positive"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -18,13 +23,19 @@ class Service(Base):
         nullable=True
     )
 
-    hourly_rate: Mapped[float] = mapped_column(Float)
+    pricing_type: Mapped[str] = mapped_column(
+        String(20),
+        default="fixed",
+        server_default="fixed",
+    )
 
-    duration: Mapped[int]
+    price: Mapped[float] = mapped_column(Float)
 
-    created_at: Mapped[datetime]
+    duration: Mapped[int | None] = mapped_column(nullable=True)
 
-    updated_at: Mapped[datetime]
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     company_id: Mapped[int] = mapped_column(
         ForeignKey("companies.id")
@@ -33,4 +44,9 @@ class Service(Base):
     company = relationship(
         "Company",
         back_populates="services"
+    )
+
+    quote_items = relationship(
+        "QuoteItem",
+        back_populates="service",
     )

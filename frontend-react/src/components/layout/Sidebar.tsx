@@ -43,7 +43,7 @@ function Sidebar({
         </div>
 
         <span className="ml-[8px] text-[13px] font-semibold text-white">
-          Nova CRM
+          Mine CRM AI
         </span>
 
       </div>

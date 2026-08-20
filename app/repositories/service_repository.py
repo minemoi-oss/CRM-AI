@@ -15,15 +15,17 @@ def create(
 
 def get_by_id(
     db: Session,
-    service_id: int
+    service_id: int,
+    company_id: int,
 ) -> Service | None:
-    return db.get(Service, service_id)
+    return db.query(Service).filter(Service.id == service_id, Service.company_id == company_id).first()
 
 
 def get_all(
-    db: Session
+    db: Session,
+    company_id: int,
 ) -> list[Service]:
-    return db.query(Service).all()
+    return db.query(Service).filter(Service.company_id == company_id).all()
 
 
 def update(

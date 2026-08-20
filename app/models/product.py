@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, Float
+from sqlalchemy import DateTime, ForeignKey, String, Float, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
@@ -22,9 +22,9 @@ class Product(Base):
 
     stock: Mapped[int] = mapped_column(default=0)
 
-    created_at: Mapped[datetime]
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    updated_at: Mapped[datetime]
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
     company_id: Mapped[int] = mapped_column(
         ForeignKey("companies.id")

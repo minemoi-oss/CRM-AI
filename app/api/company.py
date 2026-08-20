@@ -8,6 +8,8 @@ from app.schemas.company import (
     CompanyResponse
 )
 from app.services import company_services
+from app.api.dependencies import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/companies", tags=["Companies"])
 
@@ -15,52 +17,49 @@ router = APIRouter(prefix="/companies", tags=["Companies"])
 @router.post("", response_model=CompanyResponse)
 def create_company(
     company: CompanyCreate,
-    db: Session = Depends(get_db)
-):
-    return company_services.create_company(db, company)
-
-
-@router.get("", response_model=list[CompanyResponse])
-def get_companies(
-    db: Session = Depends(get_db)
-):
-    return company_services.get_companies(db)
-
-
-@router.get("/{company_id}", response_model=CompanyResponse)
-def get_company(
-    company_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
-        return company_services.get_company(db, company_id)
+        return company_services.create_company(db, company, current_user)
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@router.get("/me", response_model=CompanyResponse)
+def get_company(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        return company_services.get_company(db, current_user)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.put("/{company_id}", response_model=CompanyResponse)
+@router.put("/me", response_model=CompanyResponse)
 def update_company(
-    company_id: int,
     company: CompanyUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
         return company_services.update_company(
             db,
-            company_id,
-            company
+            company,
+            current_user,
         )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.delete("/{company_id}")
+@router.delete("/me")
 def delete_company(
-    company_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     try:
-        company_services.delete_company(db, company_id)
+        company_services.delete_company(db, current_user)
 
         return {
             "message": "Entreprise supprimée avec succès."
